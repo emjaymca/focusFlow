@@ -40,13 +40,5 @@ export const menuItems: MenuItem[] = [
     price: 3,
     image: 'https://images.pexels.com/photos/5560757/pexels-photo-5560757.jpeg?auto=compress&cs=tinysrgb&w=800',
     category: 'side'
-  },
-  {
-    id: '6',
-    name: 'Filter Coffee',
-    description: 'Traditional South Indian filter coffee with milk and jaggery',
-    price: 4,
-    image: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=800',
-    category: 'beverage'
   }
 ];
