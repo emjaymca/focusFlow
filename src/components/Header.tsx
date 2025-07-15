@@ -28,7 +28,7 @@ const Header: React.FC<HeaderProps> = ({ cartItems, user, onCartClick, onAuthCli
           <div className="hidden md:flex items-center space-x-6 text-sm text-gray-600">
             <div className="flex items-center space-x-1">
               <Phone className="w-4 h-4" />
-              <span>+1 (555) 123-4567</span>
+              <span>+61 402 213 197</span>
             </div>
             <div className="flex items-center space-x-1">
               <MapPin className="w-4 h-4" />
