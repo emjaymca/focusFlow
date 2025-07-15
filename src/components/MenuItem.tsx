@@ -2,64 +2,54 @@ import React from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { MenuItem, CartItem } from '../types';
 
-interface MenuItemProps {
+interface MenuItemComponentProps {
   item: MenuItem;
   cartItem?: CartItem;
   onAddToCart: (item: MenuItem) => void;
   onUpdateQuantity: (id: string, quantity: number) => void;
 }
 
-const MenuItemComponent: React.FC<MenuItemProps> = ({
-  item,
-  cartItem,
-  onAddToCart,
-  onUpdateQuantity
-}) => {
-  const quantity = cartItem?.quantity || 0;
-
+const MenuItemComponent: React.FC<MenuItemComponentProps> = ({ item, cartItem, onAddToCart, onUpdateQuantity }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-      <div className="aspect-w-16 aspect-h-9">
-        <img
-          src={item.image}
-          alt={item.name}
-          className="w-full h-48 object-cover"
-        />
-      </div>
-      
-      <div className="p-6">
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="text-lg font-semibold text-gray-900">{item.name}</h3>
-          <span className="text-lg font-bold text-orange-600">${item.price}</span>
+    <div className="bg-surface rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-200 flex flex-col overflow-hidden group animate-fade-in">
+      <img
+        src={item.image}
+        alt={item.name}
+        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-200"
+      />
+      <div className="flex-1 flex flex-col p-5">
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-xl font-bold text-primary-dark">{item.name}</h4>
+          <span className="bg-primary text-white px-3 py-1 rounded-full font-semibold text-sm shadow">${item.price}</span>
         </div>
-        
-        <p className="text-gray-600 text-sm mb-4">{item.description}</p>
-        
-        <div className="flex items-center justify-between">
-          {quantity === 0 ? (
-            <button
-              onClick={() => onAddToCart(item)}
-              className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add to Cart</span>
-            </button>
-          ) : (
-            <div className="flex items-center space-x-3">
+        <p className="text-text-light mb-4 flex-1">{item.description}</p>
+        <div className="mt-auto flex items-center space-x-2">
+          {cartItem ? (
+            <>
               <button
-                onClick={() => onUpdateQuantity(item.id, quantity - 1)}
-                className="bg-gray-200 text-gray-700 p-1 rounded-md hover:bg-gray-300 transition-colors"
+                className="bg-accent text-white rounded-full p-2 hover:bg-accent-dark transition-colors"
+                onClick={() => onUpdateQuantity(item.id, cartItem.quantity - 1)}
+                aria-label="Decrease quantity"
+                disabled={cartItem.quantity <= 1}
               >
                 <Minus className="w-4 h-4" />
               </button>
-              <span className="font-semibold text-lg">{quantity}</span>
+              <span className="font-semibold text-lg text-primary-dark">{cartItem.quantity}</span>
               <button
-                onClick={() => onUpdateQuantity(item.id, quantity + 1)}
-                className="bg-orange-600 text-white p-1 rounded-md hover:bg-orange-700 transition-colors"
+                className="bg-accent text-white rounded-full p-2 hover:bg-accent-dark transition-colors"
+                onClick={() => onUpdateQuantity(item.id, cartItem.quantity + 1)}
+                aria-label="Increase quantity"
               >
                 <Plus className="w-4 h-4" />
               </button>
-            </div>
+            </>
+          ) : (
+            <button
+              className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-lg shadow transition-colors"
+              onClick={() => onAddToCart(item)}
+            >
+              <Plus className="inline w-4 h-4 mr-1 align-text-bottom" /> Add to Cart
+            </button>
           )}
         </div>
       </div>

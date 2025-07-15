@@ -78,7 +78,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background font-sans text-text">
       <Header
         cartItems={cartItems}
         user={user}
@@ -113,11 +113,11 @@ function App() {
       />
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8">
+      <footer className="bg-primary-dark text-white py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h3 className="text-lg font-semibold mb-2">TJ's Thatte Idli</h3>
-          <p className="text-gray-400">Authentic South Indian Cloud Kitchen</p>
-          <p className="text-gray-400 mt-2">Fresh • Delicious • Delivered</p>
+          <p className="text-primary-light">Authentic South Indian Cloud Kitchen</p>
+          <p className="text-primary-light mt-2">Fresh • Delicious • Delivered</p>
         </div>
       </footer>
     </div>

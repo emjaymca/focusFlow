@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
+import { ShoppingCart, X } from 'lucide-react';
 import { CartItem, CustomerDetails, User } from '../types';
 import OrderForm from './OrderForm';
 
@@ -13,114 +13,101 @@ interface CartProps {
   onAuthRequired: () => void;
 }
 
-const Cart: React.FC<CartProps> = ({
-  isOpen,
-  onClose,
-  cartItems,
-  user,
-  onUpdateQuantity,
-  onPlaceOrder,
-  onAuthRequired
-}) => {
+const Cart: React.FC<CartProps> = ({ isOpen, onClose, cartItems, user, onUpdateQuantity, onPlaceOrder, onAuthRequired }) => {
   const [showOrderForm, setShowOrderForm] = useState(false);
-  
-  const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handleProceedToOrder = () => {
-    if (!user) {
+    if (user) {
+      setShowOrderForm(true);
+    } else {
       onAuthRequired();
-      return;
     }
-    setShowOrderForm(true);
   };
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-2xl font-semibold text-gray-900 flex items-center space-x-2">
-            <ShoppingBag className="w-6 h-6" />
-            <span>Your Order</span>
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 p-1"
-          >
-            <X className="w-6 h-6" />
-          </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 animate-fade-in">
+      <div className="bg-surface rounded-2xl shadow-2xl w-full max-w-lg mx-auto p-6 relative flex flex-col max-h-[90vh] overflow-y-auto">
+        <button
+          className="absolute top-4 right-4 text-text-light hover:text-primary-dark focus:outline-none"
+          onClick={onClose}
+          aria-label="Close cart"
+        >
+          <X className="w-6 h-6" />
+        </button>
+        <div className="flex items-center space-x-3 mb-6">
+          <ShoppingCart className="w-7 h-7 text-primary" />
+          <h2 className="text-2xl font-bold text-primary-dark">Your Cart</h2>
         </div>
-
-        <div className="max-h-96 overflow-y-auto">
-          {cartItems.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
-              <ShoppingBag className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-              <p>Your cart is empty</p>
-            </div>
-          ) : (
-            <div className="p-6 space-y-4">
+        {cartItems.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16">
+            <ShoppingCart className="w-16 h-16 text-muted mb-4" />
+            <p className="text-lg text-text-light mb-2">Your cart is empty.</p>
+            <button
+              onClick={onClose}
+              className="mt-4 bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition-colors font-semibold"
+            >
+              Continue Shopping
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="divide-y divide-muted mb-6">
               {cartItems.map(item => (
-                <div key={item.id} className="flex items-center space-x-4 py-4 border-b">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-16 h-16 object-cover rounded-md"
-                  />
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900">{item.name}</h3>
-                    <p className="text-orange-600 font-medium">${item.price}</p>
+                <div key={item.id} className="flex items-center justify-between py-4">
+                  <div className="flex items-center space-x-4">
+                    <img src={item.image} alt={item.name} className="w-14 h-14 rounded-lg object-cover border border-muted" />
+                    <div>
+                      <h4 className="font-semibold text-primary-dark">{item.name}</h4>
+                      <span className="text-sm text-text-light">${item.price} x {item.quantity}</span>
+                    </div>
                   </div>
                   <div className="flex items-center space-x-2">
                     <button
+                      className="bg-accent text-white rounded-full p-2 hover:bg-accent-dark transition-colors"
                       onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
-                      className="bg-gray-200 text-gray-700 p-1 rounded-md hover:bg-gray-300 transition-colors"
+                      aria-label="Decrease quantity"
+                      disabled={item.quantity <= 1}
                     >
-                      <Minus className="w-4 h-4" />
+                      -
                     </button>
-                    <span className="font-semibold text-lg w-8 text-center">{item.quantity}</span>
+                    <span className="font-semibold text-lg text-primary-dark">{item.quantity}</span>
                     <button
+                      className="bg-accent text-white rounded-full p-2 hover:bg-accent-dark transition-colors"
                       onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                      className="bg-orange-600 text-white p-1 rounded-md hover:bg-orange-700 transition-colors"
+                      aria-label="Increase quantity"
                     >
-                      <Plus className="w-4 h-4" />
+                      +
                     </button>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-gray-900">
-                      ${(item.price * item.quantity).toFixed(2)}
-                    </p>
                   </div>
                 </div>
               ))}
             </div>
-          )}
-        </div>
-
-        {cartItems.length > 0 && (
-          <div className="p-6 border-t bg-gray-50">
             <div className="flex justify-between items-center mb-4">
-              <span className="text-lg font-semibold text-gray-900">Total:</span>
-              <span className="text-2xl font-bold text-orange-600">${total.toFixed(2)}</span>
+              <span className="text-lg font-semibold text-text">Total:</span>
+              <span className="text-2xl font-bold text-primary">${total.toFixed(2)}</span>
             </div>
             <button
               onClick={handleProceedToOrder}
-              className="w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors font-semibold flex items-center justify-center space-x-2"
+              className="w-full bg-accent text-white py-3 px-6 rounded-lg hover:bg-accent-dark transition-colors font-semibold flex items-center justify-center space-x-2 mt-2"
             >
               <span>{user ? 'Proceed to Order' : 'Sign In to Order'}</span>
             </button>
-          </div>
+          </>
         )}
-
         {/* Order Form Modal */}
         {showOrderForm && user && (
-          <OrderForm
-            cartItems={cartItems}
-            total={total}
-            user={user}
-            onClose={() => setShowOrderForm(false)}
-            onPlaceOrder={onPlaceOrder}
-          />
+          <div className="animate-slide-down">
+            <OrderForm
+              cartItems={cartItems}
+              total={total}
+              user={user}
+              onClose={() => setShowOrderForm(false)}
+              onPlaceOrder={onPlaceOrder}
+            />
+          </div>
         )}
       </div>
     </div>
