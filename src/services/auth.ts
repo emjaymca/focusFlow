@@ -45,43 +45,17 @@ class AuthService {
     return false;
   }
 
-  // Mock SMS sending - logs OTP to console for development
+  // Send OTP via backend
   async sendOTP(phoneNumber: string): Promise<{ success: boolean; message: string }> {
     try {
-      // Generate OTP
-      const otp = this.generateOTP();
-      
-      // Store OTP with 5-minute expiry
-      const cleanPhone = phoneNumber.replace(/\D/g, '');
-      this.otpStore.set(cleanPhone, {
-        otp,
-        expires: Date.now() + 5 * 60 * 1000 // 5 minutes
+      const response = await fetch('http://localhost:5000/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phoneNumber })
       });
-
-      // Mock SMS sending - log to console for development
-      console.log('='.repeat(50));
-      console.log('📱 MOCK SMS SERVICE - DEVELOPMENT MODE');
-      console.log('='.repeat(50));
-      console.log(`📞 To: ${this.formatPhoneNumber(phoneNumber)}`);
-      console.log(`🔐 Your verification code: ${otp}`);
-      console.log(`⏰ Valid for: 5 minutes`);
-      console.log('='.repeat(50));
-      console.log('💡 In production, replace this with a real SMS service like:');
-      console.log('   • Twilio SMS API');
-      console.log('   • AWS SNS');
-      console.log('   • MessageBird');
-      console.log('   • Vonage (Nexmo)');
-      console.log('='.repeat(50));
-
-      // Simulate network delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      return {
-        success: true,
-        message: 'SMS sent successfully! Check the browser console for your verification code.'
-      };
+      const data = await response.json();
+      return data;
     } catch (error) {
-      console.error('Mock SMS service error:', error);
       return {
         success: false,
         message: 'Failed to send SMS. Please try again.'
@@ -89,43 +63,17 @@ class AuthService {
     }
   }
 
-  // Verify OTP
+  // Verify OTP via backend
   async verifyOTP(phoneNumber: string, otp: string): Promise<{ success: boolean; message: string }> {
     try {
-      const cleanPhone = phoneNumber.replace(/\D/g, '');
-      const storedData = this.otpStore.get(cleanPhone);
-
-      if (!storedData) {
-        return {
-          success: false,
-          message: 'OTP not found or expired. Please request a new one.'
-        };
-      }
-
-      if (Date.now() > storedData.expires) {
-        this.otpStore.delete(cleanPhone);
-        return {
-          success: false,
-          message: 'OTP has expired. Please request a new one.'
-        };
-      }
-
-      if (storedData.otp !== otp) {
-        return {
-          success: false,
-          message: 'Invalid OTP. Please check and try again.'
-        };
-      }
-
-      // Clean up used OTP
-      this.otpStore.delete(cleanPhone);
-
-      return {
-        success: true,
-        message: 'Phone number verified successfully'
-      };
+      const response = await fetch('http://localhost:5000/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phoneNumber, otp })
+      });
+      const data = await response.json();
+      return data;
     } catch (error) {
-      console.error('OTP verification error:', error);
       return {
         success: false,
         message: 'Failed to verify OTP. Please try again.'
