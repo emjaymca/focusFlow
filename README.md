@@ -55,6 +55,36 @@ A beautiful cross-platform mobile app (iOS & Android) to help you beat procrasti
 - Clean, distraction-free interface
 - Touch-optimized controls
 
+## 💬 AI Motivation Examples
+
+The app provides contextual motivation based on your situation:
+
+**When You Have a Long Streak:**
+> "7 days of consistency! You're building incredible habits. Your dedication is transforming procrastination into productivity. Keep this momentum!" — FocusFlow AI
+
+**Evening with No Tasks Completed:**
+> "It's not too late to start. Even one small task completed today is a victory. What's the smallest thing you can do right now?" — FocusFlow AI
+
+**After Completing Multiple Tasks:**
+> "3 tasks done! You're crushing it today. Your focus is paying off. Keep this energy going!" — FocusFlow AI
+
+**With an Active Task Selected:**
+> "'Write documentation' is waiting for you. Break it down into tiny steps. Just 5 minutes of focus can build serious momentum." — FocusFlow AI
+
+**Anti-Procrastination Tips:**
+- 🎯 Try the 2-minute rule: If a task takes less than 2 minutes, do it now!
+- 🧠 Break large tasks into tiny, manageable steps
+- ⏰ Set a timer for just 5 minutes of focused work
+- 📱 Put your phone in another room while working
+- ✅ Complete the hardest task first thing in the morning
+
+**Focus Reminders:**
+- 📱 "Social media can wait. Your goals can't."
+- ⏱️ "You're losing precious time. Start a Pomodoro now!"
+- 💪 "You're stronger than your distractions."
+- 🔥 "Your streak is counting on you!"
+- ✨ "Small focused actions lead to big results."
+
 ## 🛠️ Tech Stack
 
 - **React Native** - Cross-platform mobile framework

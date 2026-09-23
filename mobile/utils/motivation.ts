@@ -167,7 +167,22 @@ export function getAntiProcrastinationTip(): string {
   return tips[Math.floor(Math.random() * tips.length)];
 }
 
-export function getFocusReminder(): string {
+export function getFocusReminder(context?: { timeAway?: number }): string {
+  const { timeAway = 0 } = context || {};
+  const minutesAway = Math.floor(timeAway / (1000 * 60));
+  
+  // If they were away for a significant time, give stronger reminders
+  if (minutesAway > 30) {
+    const strongReminders = [
+      `📱 You've been away for ${minutesAway} minutes. Social media can wait. Your goals can't.`,
+      `⏱️ ${minutesAway} minutes lost to scrolling. Let's make the next 25 count!`,
+      `🎯 Those ${minutesAway} minutes could have been a completed Pomodoro. Start one NOW!`,
+      `💪 ${minutesAway} minutes gone. But you're back now. That's what matters. Focus!`,
+      `🚀 Stop scrolling, start doing. Your future self is begging you to focus now.`,
+    ];
+    return strongReminders[Math.floor(Math.random() * strongReminders.length)];
+  }
+  
   const reminders = [
     "📱 Social media can wait. Your goals can't.",
     "⏱️ You're losing precious time. Start a Pomodoro now!",
@@ -182,4 +197,20 @@ export function getFocusReminder(): string {
   ];
   
   return reminders[Math.floor(Math.random() * reminders.length)];
+}
+
+export function getSocialMediaWarning(minutesAway: number): string {
+  if (minutesAway < 5) {
+    return "Quick check turned into a long scroll? Let's refocus.";
+  } else if (minutesAway < 15) {
+    return `${minutesAway} minutes vanished. Time to reclaim your focus.`;
+  } else if (minutesAway < 30) {
+    return `${minutesAway} minutes lost to the scroll. Your tasks are waiting.`;
+  } else if (minutesAway < 60) {
+    return `${minutesAway} minutes gone. That's a whole Pomodoro session wasted!`;
+  } else {
+    const hours = Math.floor(minutesAway / 60);
+    const mins = minutesAway % 60;
+    return `${hours}h ${mins}m away. Imagine what you could have accomplished!`;
+  }
 }

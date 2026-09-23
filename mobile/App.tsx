@@ -70,6 +70,15 @@ export default function App() {
     await recordMotivationShown();
   };
 
+  const handleStartFocusFromMotivation = () => {
+    setShowMotivation(false);
+    if (currentTask) {
+      setView('timer');
+    } else {
+      setView('tasks');
+    }
+  };
+
   const loadData = async () => {
     const savedTasks = await loadFromStorage<Task[]>('tasks');
     const savedSessions = await loadFromStorage<PomodoroSession[]>('sessions');
@@ -206,6 +215,7 @@ export default function App() {
         onClose={handleMotivationClose}
         stats={stats}
         currentTask={currentTask}
+        onStartFocus={handleStartFocusFromMotivation}
       />
     </SafeAreaView>
   );

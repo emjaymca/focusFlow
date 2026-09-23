@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, Animated } from 'react-native';
-import { getAIMotivationalQuote, getTimeOfDay, getAntiProcrastinationTip, getFocusReminder } from '../utils/motivation';
+import { getAIMotivationalQuote, getTimeOfDay, getAntiProcrastinationTip, getFocusReminder, getSocialMediaWarning } from '../utils/motivation';
+import { getTimeSinceLastOpen } from '../utils/storage';
 import { Task, UserStats } from '../types';
 
 interface MotivationModalProps {
@@ -8,13 +9,16 @@ interface MotivationModalProps {
   onClose: () => void;
   stats: UserStats;
   currentTask?: Task | null;
+  onStartFocus?: () => void;
 }
 
-export default function MotivationModal({ visible, onClose, stats, currentTask }: MotivationModalProps) {
+export default function MotivationModal({ visible, onClose, stats, currentTask, onStartFocus }: MotivationModalProps) {
   const [quote, setQuote] = useState<{ quote: string; author: string; context?: string } | null>(null);
   const [tip, setTip] = useState<string>('');
   const [fadeAnim] = useState(new Animated.Value(0));
   const [loading, setLoading] = useState(true);
+  const [timeAway, setTimeAway] = useState(0);
+  const [socialMediaWarning, setSocialMediaWarning] = useState<string>('');
 
   useEffect(() => {
     if (visible) {
@@ -29,6 +33,17 @@ export default function MotivationModal({ visible, onClose, stats, currentTask }
 
   const loadMotivation = async () => {
     setLoading(true);
+    
+    // Get time since last open
+    const timeSince = await getTimeSinceLastOpen();
+    setTimeAway(timeSince);
+    
+    const minutesAway = Math.floor(timeSince / (1000 * 60));
+    
+    // Show social media warning if they were away
+    if (minutesAway >= 5) {
+      setSocialMediaWarning(getSocialMediaWarning(minutesAway));
+    }
     
     const timeOfDay = getTimeOfDay();
     const context = {
@@ -60,6 +75,16 @@ export default function MotivationModal({ visible, onClose, stats, currentTask }
     loadMotivation();
   };
 
+  const handleStartFocus = () => {
+    handleClose();
+    if (onStartFocus) {
+      onStartFocus();
+    }
+  };
+
+  const minutesAway = Math.floor(timeAway / (1000 * 60));
+  const showTimeAway = minutesAway >= 5;
+
   if (!visible) return null;
 
   return (
@@ -83,6 +108,13 @@ export default function MotivationModal({ visible, onClose, stats, currentTask }
             </View>
           ) : (
             <>
+              {showTimeAway && socialMediaWarning && (
+                <View style={styles.warningBanner}>
+                  <Text style={styles.warningEmoji}>⚠️</Text>
+                  <Text style={styles.warningText}>{socialMediaWarning}</Text>
+                </View>
+              )}
+
               <View style={styles.quoteContainer}>
                 <Text style={styles.quoteIcon}>"</Text>
                 <Text style={styles.quoteText}>{quote?.quote}</Text>
@@ -106,17 +138,24 @@ export default function MotivationModal({ visible, onClose, stats, currentTask }
               </View>
 
               <View style={styles.reminder}>
-                <Text style={styles.reminderText}>{getFocusReminder()}</Text>
+                <Text style={styles.reminderText}>{getFocusReminder({ timeAway })}</Text>
               </View>
 
               <View style={styles.actions}>
-                <TouchableOpacity style={styles.secondaryButton} onPress={refreshQuote}>
-                  <Text style={styles.secondaryButtonText}>🔄 New Quote</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.primaryButton} onPress={handleClose}>
-                  <Text style={styles.primaryButtonText}>Let's Focus! 💪</Text>
-                </TouchableOpacity>
+                {currentTask && onStartFocus ? (
+                  <TouchableOpacity style={styles.primaryButtonLarge} onPress={handleStartFocus}>
+                    <Text style={styles.primaryButtonText}>🚀 Start Pomodoro NOW!</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity style={styles.primaryButtonLarge} onPress={handleClose}>
+                    <Text style={styles.primaryButtonText}>Let's Focus! 💪</Text>
+                  </TouchableOpacity>
+                )}
               </View>
+              
+              <TouchableOpacity style={styles.refreshButton} onPress={refreshQuote}>
+                <Text style={styles.refreshButtonText}>🔄 New Quote</Text>
+              </TouchableOpacity>
             </>
           )}
         </Animated.View>
@@ -250,8 +289,50 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
-  actions: {
+  warningBanner: {
+    backgroundColor: '#FEF2F2',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: '#EF4444',
     flexDirection: 'row',
+    alignItems: 'center',
+  },
+  warningEmoji: {
+    fontSize: 24,
+    marginRight: 12,
+  },
+  warningText: {
+    flex: 1,
+    fontSize: 16,
+    color: '#991B1B',
+    fontWeight: 'bold',
+  },
+  actions: {
+    marginBottom: 12,
+  },
+  primaryButtonLarge: {
+    backgroundColor: '#9333EA',
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    elevation: 4,
+    shadowColor: '#9333EA',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+  },
+  refreshButton: {
+    backgroundColor: '#F3F4F6',
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  refreshButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#374151',
   },
   secondaryButton: {
     flex: 1,

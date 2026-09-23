@@ -53,14 +53,17 @@ export async function shouldShowMotivation(): Promise<boolean> {
   const timeSince = await getTimeSinceLastOpen();
   const lastMotivation = await loadFromStorage<string>('lastMotivationShown');
   
-  // Show if been away for more than 30 minutes
-  if (timeSince > 30 * 60 * 1000) return true;
+  // Always show if been away for more than 5 minutes (likely social media!)
+  if (timeSince > 5 * 60 * 1000) return true;
   
   // Or if no motivation shown in last 2 hours
   if (lastMotivation) {
     const lastMotivationTime = new Date(lastMotivation).getTime();
     const now = new Date().getTime();
     if (now - lastMotivationTime > 2 * 60 * 60 * 1000) return true;
+  } else {
+    // First time user, show motivation
+    return true;
   }
   
   return false;
