@@ -1,138 +1,92 @@
 import React from 'react';
-import { Menu as MenuIcon, ShoppingCart, User, LogOut, X } from 'lucide-react';
-import { useState } from 'react';
-import { CartItem, User as UserType } from '../types';
+import { CheckCircle2, Clock, BarChart3 } from 'lucide-react';
+import { UserStats } from '../types';
 
 interface HeaderProps {
-  cartItems: CartItem[];
-  user: UserType | null;
-  onCartClick: () => void;
-  onAuthClick: () => void;
-  onLogout: () => void;
+  view: 'tasks' | 'timer' | 'stats';
+  onViewChange: (view: 'tasks' | 'timer' | 'stats') => void;
+  stats: UserStats;
 }
 
-const Header: React.FC<HeaderProps> = ({ cartItems, user, onCartClick, onAuthClick, onLogout }) => {
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-
+export default function Header({ view, onViewChange, stats }: HeaderProps) {
   return (
-    <header className="backdrop-blur-md bg-white/70 shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between h-20">
-        {/* Logo and Brand */}
-        <div className="flex items-center space-x-4">
-          <button
-            className={`md:hidden text-primary hover:text-primary-dark focus:outline-none transition-transform ${mobileNavOpen ? 'rotate-90' : ''}`}
-            onClick={() => setMobileNavOpen(!mobileNavOpen)}
-            aria-label="Open menu"
-          >
-            <MenuIcon className="w-8 h-8" />
-          </button>
-          <span className="flex items-center space-x-3 cursor-pointer group transition-transform hover:scale-105">
-            <span className="bg-primary p-2 rounded-full shadow-lg flex items-center justify-center transition-transform group-hover:scale-110">
-              <MenuIcon className="w-8 h-8 text-white" />
-            </span>
-            <span className="font-extrabold text-2xl tracking-tight text-primary-dark drop-shadow-sm group-hover:text-primary">TJ's Thatte Idli</span>
-          </span>
-        </div>
+    <header className="bg-white dark:bg-gray-800 shadow-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center space-x-3">
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-2 rounded-lg">
+              <CheckCircle2 className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+                FocusFlow
+              </h1>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Beat Procrastination
+              </p>
+            </div>
+          </div>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center space-x-8">
-          <button
-            onClick={onCartClick}
-            className="relative bg-accent text-white px-5 py-2 rounded-xl shadow hover:bg-accent-dark transition-colors flex items-center space-x-2 text-lg font-semibold"
-          >
-            <ShoppingCart className="w-6 h-6" />
-            <span className="hidden sm:block">Cart</span>
-            {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold shadow">
-                {totalItems}
-              </span>
-            )}
-          </button>
-          {user ? (
-            <>
-              <span className="flex items-center space-x-2 text-base text-primary-dark font-semibold">
-                <User className="w-5 h-5" />
-                <span>Hi, {user.name || 'User'}</span>
-              </span>
-              <button
-                onClick={onLogout}
-                className="text-primary-dark hover:text-primary p-2 transition-colors"
-                title="Logout"
-              >
-                <LogOut className="w-6 h-6" />
-              </button>
-            </>
-          ) : (
+          <nav className="flex space-x-2">
             <button
-              onClick={onAuthClick}
-              className="bg-primary-dark text-white px-5 py-2 rounded-xl hover:bg-primary transition-colors flex items-center space-x-2 shadow text-lg font-semibold"
+              onClick={() => onViewChange('tasks')}
+              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                view === 'tasks'
+                  ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-md'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
             >
-              <User className="w-6 h-6" />
-              <span>Sign In</span>
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="h-4 w-4" />
+                <span>Tasks</span>
+              </div>
             </button>
-          )}
-        </div>
-      </div>
 
-      {/* Mobile Nav Drawer */}
-      <div className={`fixed inset-0 z-40 transition-all duration-300 ${mobileNavOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
-        {/* Overlay */}
-        <div
-          className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${mobileNavOpen ? 'opacity-100' : 'opacity-0'}`}
-          onClick={() => setMobileNavOpen(false)}
-          aria-hidden="true"
-        />
-        {/* Drawer */}
-        <nav
-          className={`fixed top-0 left-0 h-full w-72 bg-white/95 shadow-2xl p-8 flex flex-col space-y-6 transform transition-transform duration-300 ${mobileNavOpen ? 'translate-x-0' : '-translate-x-full'}`}
-          aria-label="Mobile menu"
-        >
-          <button
-            onClick={() => setMobileNavOpen(false)}
-            className="self-end text-primary-dark hover:text-primary p-2 mb-4"
-            aria-label="Close menu"
-          >
-            <X className="w-7 h-7" />
-          </button>
-          <button
-            onClick={onCartClick}
-            className="w-full flex items-center space-x-2 bg-accent text-white px-5 py-3 rounded-xl shadow hover:bg-accent-dark transition-colors text-lg font-semibold"
-          >
-            <ShoppingCart className="w-6 h-6" />
-            <span>Cart</span>
-            {totalItems > 0 && (
-              <span className="ml-2 bg-primary text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold shadow">
-                {totalItems}
-              </span>
-            )}
-          </button>
-          {user ? (
-            <>
-              <span className="flex items-center space-x-2 text-base text-primary-dark font-semibold">
-                <User className="w-5 h-5" />
-                <span>Hi, {user.name || 'User'}</span>
-              </span>
-              <button
-                onClick={onLogout}
-                className="w-full text-left text-primary-dark hover:text-primary py-3 text-lg font-semibold"
-              >
-                <LogOut className="w-6 h-6 inline mr-2" />Logout
-              </button>
-            </>
-          ) : (
             <button
-              onClick={onAuthClick}
-              className="w-full flex items-center space-x-2 bg-primary-dark text-white px-5 py-3 rounded-xl hover:bg-primary transition-colors shadow text-lg font-semibold"
+              onClick={() => onViewChange('timer')}
+              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                view === 'timer'
+                  ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-md'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
             >
-              <User className="w-6 h-6" />
-              <span>Sign In</span>
+              <div className="flex items-center space-x-2">
+                <Clock className="h-4 w-4" />
+                <span>Timer</span>
+              </div>
             </button>
-          )}
-        </nav>
+
+            <button
+              onClick={() => onViewChange('stats')}
+              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                view === 'stats'
+                  ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-md'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <BarChart3 className="h-4 w-4" />
+                <span>Stats</span>
+              </div>
+            </button>
+          </nav>
+
+          <div className="flex items-center space-x-4 text-sm">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                {stats.currentStreak}
+              </div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">day streak</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                {stats.tasksCompletedToday}
+              </div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">done today</div>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
   );
-};
-
-export default Header;
+}
