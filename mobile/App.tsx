@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, StyleSheet, TouchableOpacity, Text, StatusBar, SafeAreaView } from 'react-native';
+import { View, ScrollView, StyleSheet, TouchableOpacity, Text, StatusBar, SafeAreaView, AppState } from 'react-native';
 import { Task, PomodoroSession, DailyGoal, UserStats, AppSettings } from './types';
-import { loadFromStorage, saveToStorage } from './utils/storage';
+import { loadFromStorage, saveToStorage, recordAppOpen, shouldShowMotivation, recordMotivationShown } from './utils/storage';
 import { calculateStats } from './utils/stats';
 import TasksScreen from './screens/TasksScreen';
 import TimerScreen from './screens/TimerScreen';
 import StatsScreen from './screens/StatsScreen';
 import Header from './components/Header';
+import MotivationModal from './components/MotivationModal';
 
 export default function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -33,10 +34,41 @@ export default function App() {
   
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
   const [view, setView] = useState<'tasks' | 'timer' | 'stats'>('tasks');
+  const [showMotivation, setShowMotivation] = useState(false);
 
   useEffect(() => {
     loadData();
+    checkAndShowMotivation();
+    
+    // Track when app comes to foreground
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
+    
+    return () => {
+      subscription.remove();
+    };
   }, []);
+
+  const handleAppStateChange = async (nextAppState: string) => {
+    if (nextAppState === 'active') {
+      await recordAppOpen();
+      checkAndShowMotivation();
+    }
+  };
+
+  const checkAndShowMotivation = async () => {
+    const should = await shouldShowMotivation();
+    if (should) {
+      // Delay to let UI load
+      setTimeout(() => {
+        setShowMotivation(true);
+      }, 1000);
+    }
+  };
+
+  const handleMotivationClose = async () => {
+    setShowMotivation(false);
+    await recordMotivationShown();
+  };
 
   const loadData = async () => {
     const savedTasks = await loadFromStorage<Task[]>('tasks');
@@ -127,7 +159,12 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <Header view={view} onViewChange={setView} stats={stats} />
+      <Header 
+        view={view} 
+        onViewChange={setView} 
+        stats={stats}
+        onMotivationPress={() => setShowMotivation(true)}
+      />
       
       <View style={styles.content}>
         {view === 'tasks' && (
@@ -163,6 +200,13 @@ export default function App() {
           />
         )}
       </View>
+
+      <MotivationModal
+        visible={showMotivation}
+        onClose={handleMotivationClose}
+        stats={stats}
+        currentTask={currentTask}
+      />
     </SafeAreaView>
   );
 }

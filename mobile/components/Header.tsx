@@ -6,19 +6,29 @@ interface HeaderProps {
   view: 'tasks' | 'timer' | 'stats';
   onViewChange: (view: 'tasks' | 'timer' | 'stats') => void;
   stats: UserStats;
+  onMotivationPress: () => void;
 }
 
-export default function Header({ view, onViewChange, stats }: HeaderProps) {
+export default function Header({ view, onViewChange, stats, onMotivationPress }: HeaderProps) {
   return (
     <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <View style={styles.iconContainer}>
-          <Text style={styles.iconText}>✓</Text>
+      <View style={styles.topRow}>
+        <View style={styles.titleContainer}>
+          <View style={styles.iconContainer}>
+            <Text style={styles.iconText}>✓</Text>
+          </View>
+          <View>
+            <Text style={styles.title}>FocusFlow</Text>
+            <Text style={styles.subtitle}>Beat Procrastination</Text>
+          </View>
         </View>
-        <View>
-          <Text style={styles.title}>FocusFlow</Text>
-          <Text style={styles.subtitle}>Beat Procrastination</Text>
-        </View>
+
+        <TouchableOpacity 
+          style={styles.motivationButton}
+          onPress={onMotivationPress}
+        >
+          <Text style={styles.motivationEmoji}>✨</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.nav}>
@@ -72,10 +82,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#E5E7EB',
   },
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
   },
   iconContainer: {
     width: 40,
@@ -99,6 +114,19 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 12,
     color: '#6B7280',
+  },
+  motivationButton: {
+    backgroundColor: '#F5F3FF',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#9333EA',
+  },
+  motivationEmoji: {
+    fontSize: 24,
   },
   nav: {
     flexDirection: 'row',

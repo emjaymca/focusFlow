@@ -25,3 +25,47 @@ export async function clearStorage(key: string): Promise<void> {
     console.error(`Error clearing ${key} from storage:`, error);
   }
 }
+
+// Track app usage patterns
+export async function recordAppOpen(): Promise<void> {
+  const now = new Date().toISOString();
+  await saveToStorage('lastAppOpen', now);
+  
+  // Get open history
+  const history = await loadFromStorage<string[]>('appOpenHistory') || [];
+  history.push(now);
+  
+  // Keep only last 50 opens
+  const recent = history.slice(-50);
+  await saveToStorage('appOpenHistory', recent);
+}
+
+export async function getTimeSinceLastOpen(): Promise<number> {
+  const lastOpen = await loadFromStorage<string>('lastAppOpen');
+  if (!lastOpen) return Infinity;
+  
+  const lastOpenTime = new Date(lastOpen).getTime();
+  const now = new Date().getTime();
+  return now - lastOpenTime;
+}
+
+export async function shouldShowMotivation(): Promise<boolean> {
+  const timeSince = await getTimeSinceLastOpen();
+  const lastMotivation = await loadFromStorage<string>('lastMotivationShown');
+  
+  // Show if been away for more than 30 minutes
+  if (timeSince > 30 * 60 * 1000) return true;
+  
+  // Or if no motivation shown in last 2 hours
+  if (lastMotivation) {
+    const lastMotivationTime = new Date(lastMotivation).getTime();
+    const now = new Date().getTime();
+    if (now - lastMotivationTime > 2 * 60 * 60 * 1000) return true;
+  }
+  
+  return false;
+}
+
+export async function recordMotivationShown(): Promise<void> {
+  await saveToStorage('lastMotivationShown', new Date().toISOString());
+}
