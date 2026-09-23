@@ -1,8 +1,30 @@
 # FocusFlow - Anti-Procrastination App
 
-A beautiful cross-platform mobile app (iOS & Android) to help you beat procrastination with task management and the Pomodoro Technique.
+A beautiful cross-platform mobile app (iOS & Android) to help you beat procrastination with task management, Pomodoro Technique, and **AI-powered motivation**.
 
 ## 🚀 Features
+
+### ✨ AI-Powered Motivation System
+
+**Smart, Contextual Motivation:**
+- 🧠 **AI-generated quotes** personalized to your progress
+- ⏰ **Time-aware messages** (different for morning/afternoon/evening)
+- 🔥 **Streak celebrations** with special encouragement
+- 🎯 **Task-specific motivation** referencing what you're working on
+- 💡 **Anti-procrastination tips** to overcome resistance
+- 🚨 **Focus reminders** when you need that extra push
+
+**Smart Detection:**
+- Automatically shows motivation when you return after being away (30+ minutes)
+- Tracks your usage patterns to understand when you need encouragement
+- Periodic reminders every 2 hours to keep you on track
+- Learns from your productivity habits
+
+**Manual Motivation:**
+- Tap the ✨ sparkle button in the header anytime you need a boost
+- Refresh for new quotes and tips
+- See your current stats and achievements
+- Get instant anti-procrastination advice
 
 ### 📝 Task Management
 - Create and organize tasks with priorities (Low, Medium, High)
