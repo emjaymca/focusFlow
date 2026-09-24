@@ -1,206 +1,206 @@
-# FocusFlow - Anti-Procrastination App
+# FocusFlow 📱✨
 
-A beautiful cross-platform mobile app (iOS & Android) to help you beat procrastination with task management, Pomodoro Technique, and **AI-powered motivation**.
+**AI-Powered Anti-Procrastination App for iOS & Android**
 
-## 🚀 Features
+<div align="center">
+  
+  <p>
+    <strong>Beat procrastination with intelligent motivation and the Pomodoro Technique</strong>
+  </p>
+
+  <p>
+    <a href="#-features">Features</a> •
+    <a href="#-quick-start">Quick Start</a> •
+    <a href="#-installation">Installation</a>
+  </p>
+</div>
+
+---
+
+## 🌟 Features
 
 ### ✨ AI-Powered Motivation System
-
-**Smart, Contextual Motivation:**
-- 🧠 **AI-generated quotes** personalized to your progress
-- ⏰ **Time-aware messages** (different for morning/afternoon/evening)
-- 🔥 **Streak celebrations** with special encouragement
-- 🎯 **Task-specific motivation** referencing what you're working on
-- 💡 **Anti-procrastination tips** to overcome resistance
-- 🚨 **Focus reminders** when you need that extra push
-
-**Smart Detection:**
-- Automatically shows motivation when you return after being away (30+ minutes)
-- Tracks your usage patterns to understand when you need encouragement
-- Periodic reminders every 2 hours to keep you on track
-- Learns from your productivity habits
-
-**Manual Motivation:**
-- Tap the ✨ sparkle button in the header anytime you need a boost
-- Refresh for new quotes and tips
-- See your current stats and achievements
-- Get instant anti-procrastination advice
+- **Smart Social Media Detection** - Detects when you've been away for 5+ minutes (likely scrolling)
+- **Contextual Quotes** - Personalized motivational messages based on your progress, time of day, and current task
+- **Anti-Procrastination Tips** - Practical advice to overcome resistance
+- **Focus Reminders** - Direct messaging when you need that extra push
+- **Time-Away Warnings** - Shows exactly how much time you lost to distractions
 
 ### 📝 Task Management
 - Create and organize tasks with priorities (Low, Medium, High)
-- Track task status: To-do → In Progress → Completed
+- Track status: To-do → In Progress → Completed
 - Add descriptions and estimated pomodoros
 - Color-coded priority badges
 - Task selection for focus sessions
 
 ### ⏱️ Pomodoro Timer
-- 25-minute focus sessions with breaks
-- Beautiful circular progress indicator
+- 25-minute focus sessions with 5-minute breaks
+- Beautiful circular SVG progress indicator
 - Automatic session tracking
-- Visual progress with animated timer
-- Session counter with dots
+- Long breaks after configurable sessions
+- Tracks completed pomodoros per task
 
-### 📊 Statistics & Progress
-- Total tasks completed counter
-- Total pomodoros and focus time
-- Current and longest streak tracking
+### 📊 Statistics & Gamification
+- Total tasks completed and focus time
+- Current and longest streak tracking 🔥
 - Weekly progress visualization
-- Achievement system with badges
-- Recent activity timeline
+- Achievement system with unlockable badges
 
-### 🎨 Modern Mobile UI
-- Native iOS and Android design
-- Smooth animations and transitions
-- Purple gradient theme
-- Clean, distraction-free interface
-- Touch-optimized controls
+### 🎯 Daily Goals
+- Set and track daily objectives
+- Visual progress bars
+- Quick increment buttons
 
-## 💬 AI Motivation Examples
+---
 
-The app provides contextual motivation based on your situation:
-
-**When You Have a Long Streak:**
-> "7 days of consistency! You're building incredible habits. Your dedication is transforming procrastination into productivity. Keep this momentum!" — FocusFlow AI
-
-**Evening with No Tasks Completed:**
-> "It's not too late to start. Even one small task completed today is a victory. What's the smallest thing you can do right now?" — FocusFlow AI
-
-**After Completing Multiple Tasks:**
-> "3 tasks done! You're crushing it today. Your focus is paying off. Keep this energy going!" — FocusFlow AI
-
-**With an Active Task Selected:**
-> "'Write documentation' is waiting for you. Break it down into tiny steps. Just 5 minutes of focus can build serious momentum." — FocusFlow AI
-
-**Anti-Procrastination Tips:**
-- 🎯 Try the 2-minute rule: If a task takes less than 2 minutes, do it now!
-- 🧠 Break large tasks into tiny, manageable steps
-- ⏰ Set a timer for just 5 minutes of focused work
-- 📱 Put your phone in another room while working
-- ✅ Complete the hardest task first thing in the morning
-
-**Focus Reminders:**
-- 📱 "Social media can wait. Your goals can't."
-- ⏱️ "You're losing precious time. Start a Pomodoro now!"
-- 💪 "You're stronger than your distractions."
-- 🔥 "Your streak is counting on you!"
-- ✨ "Small focused actions lead to big results."
-
-## 🛠️ Tech Stack
-
-- **React Native** - Cross-platform mobile framework
-- **Expo** - Development platform for universal React apps
-- **TypeScript** - Type-safe development
-- **AsyncStorage** - Persistent local data storage
-- **React Native SVG** - Vector graphics for timer
-
-## 📱 Running the App
-
-### Prerequisites
-- Node.js 16+ installed
-- Expo CLI installed globally: `npm install -g expo-cli`
-- For iOS: Mac with Xcode installed
-- For Android: Android Studio with emulator set up
+## 🚀 Quick Start
 
 ### Installation
 
-1. Install dependencies:
 ```bash
-npm install
-```
+# Clone the repository
+git clone https://github.com/emjaymca/focusflow-mobile.git
+cd focusflow-mobile
 
-2. Start the Expo development server:
-```bash
+# Install dependencies
+npm install
+
+# Start the development server
 npm start
 ```
 
-3. Run on your preferred platform:
+### Run on Your Device
 
-**iOS:**
+**Option 1: Expo Go (Fastest!)**
+
+1. Install **Expo Go** on your phone:
+   - [iOS App Store](https://apps.apple.com/app/expo-go/id982107779)
+   - [Google Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent)
+
+2. Scan the QR code shown in your terminal
+
+3. App loads instantly! ✨
+
+**Option 2: Emulator/Simulator**
+
 ```bash
+# iOS Simulator (Mac only)
 npm run ios
-```
 
-**Android:**
-```bash
+# Android Emulator
 npm run android
 ```
 
-**Web (for testing):**
+---
+
+## 📱 Installation on Your Phone
+
+### Android
+
+**Build APK:**
 ```bash
-npm run web
+npm run build:android
 ```
 
-### Testing on Physical Device
+This creates an APK you can install directly on any Android device!
 
-1. Install the **Expo Go** app on your iOS or Android device
-2. Run `npm start` in your terminal
-3. Scan the QR code with your device:
-   - **iOS**: Use Camera app
-   - **Android**: Use Expo Go app
+### iOS
+
+**Build for TestFlight:**
+```bash
+npm run build:ios
+```
+
+See [INSTALL.md](./INSTALL.md) for detailed instructions.
+
+---
+
+## 🧠 AI Motivation System
+
+### How It Works
+
+**Social Media Detection:**
+- Monitors when you leave the app
+- Detects absences of 5+ minutes
+- Shows time-away warnings when you return
+
+**Example After 15 Minutes Away:**
+> ⚠️ "15 minutes vanished. Time to reclaim your focus."
+> 
+> *"Stop scrolling, start doing."*
+>
+> 🚀 [Start Pomodoro NOW!]
+
+### Manual Motivation
+
+Tap the ✨ sparkle button anytime for:
+- Fresh motivational quote
+- Anti-procrastination tip
+- Current stats display
+- Focus reminders
+
+---
+
+## 🛠️ Tech Stack
+
+- **React Native 0.76.5** - Cross-platform mobile framework
+- **Expo ~52.0.0** - Development and build platform
+- **TypeScript** - Type-safe development
+- **AsyncStorage** - Persistent local storage
+- **React Native SVG** - Vector graphics for timer
+
+---
 
 ## 📂 Project Structure
 
 ```
-mobile/
-├── App.tsx                 # Main app component
-├── types.ts               # TypeScript interfaces
-├── components/
-│   └── Header.tsx         # Navigation header
-├── screens/
-│   ├── TasksScreen.tsx    # Task management view
-│   ├── TimerScreen.tsx    # Pomodoro timer view
-│   └── StatsScreen.tsx    # Statistics dashboard
-└── utils/
-    ├── storage.ts         # AsyncStorage helpers
-    └── stats.ts           # Statistics calculations
+focusflow-mobile/
+├── mobile/                    # App source code
+│   ├── App.tsx               # Main app component
+│   ├── components/           # UI components
+│   ├── screens/              # Main screens
+│   └── utils/                # Utilities
+├── assets/                   # App assets
+├── app.json                  # Expo configuration
+├── eas.json                  # Build configuration
+└── package.json              # Dependencies
 ```
-
-## 🎯 How to Use
-
-1. **Add Tasks**: Tap the "+ Add Task" button to create new tasks
-2. **Set Priorities**: Choose Low, Medium, or High priority
-3. **Start Focus Session**: Select a task and tap "Work on this"
-4. **Use Timer**: Switch to Timer view and start your pomodoro
-5. **Track Progress**: View your statistics in the Stats view
-
-## 📦 Building for Production
-
-### iOS
-
-1. Configure your app in `app.json`
-2. Build the standalone app:
-```bash
-expo build:ios
-```
-
-### Android
-
-1. Configure your app in `app.json`
-2. Build the APK or App Bundle:
-```bash
-expo build:android
-```
-
-## 🔧 Configuration
-
-Edit `app.json` to customize:
-- App name and icon
-- Splash screen
-- Bundle identifiers
-- Build settings
-
-## 📝 License
-
-MIT License - Feel free to use this project for your own purposes!
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 🙏 Acknowledgments
-
-Built with React Native and Expo for cross-platform mobile development.
 
 ---
 
-**Happy Focusing! 🎯**
+## 🎯 Usage
+
+1. **Add Tasks** - Tap "+ Add Task"
+2. **Set Priorities** - Choose Low, Medium, or High
+3. **Get Motivated** - Tap ✨ sparkle button
+4. **Start Focus** - Select task, switch to Timer
+5. **Track Progress** - View stats and achievements
+
+---
+
+## 🚀 Building for Production
+
+### Android APK
+
+```bash
+npm run build:android
+```
+
+### iOS App
+
+```bash
+npm run build:ios
+npx eas submit --platform ios
+```
+
+---
+
+## 📄 License
+
+MIT License - Free to use for your own purposes!
+
+---
+
+<div align="center">
+  <strong>Made with ❤️ for productivity enthusiasts</strong>
+</div>
